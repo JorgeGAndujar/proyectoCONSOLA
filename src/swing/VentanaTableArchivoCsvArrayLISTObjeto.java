@@ -6,23 +6,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class VentanaTableArchivoCsv extends javax.swing.JFrame {
+public class VentanaTableArchivoCsvArrayLISTObjeto extends javax.swing.JFrame {
 
     String[] cabecera = {"N1", "N2", "N3", "N4", "PROMEDIO"};
     String[][] cuerpo = {};
     DefaultTableModel dtm = new DefaultTableModel(cuerpo, cabecera);
-    //GUARDO LO QUE NECESITAS
-    int[] n1 = new int[6];
-    int[] n2 = new int[6];
-    int[] n3 = new int[6];
-    int[] n4 = new int[6];
+    
+    //GUARDP LO QUE LEO DEL ARCHIVO
+    List<Nota> notas_al = new ArrayList<>();
+   
 
-    public VentanaTableArchivoCsv() {
+    public VentanaTableArchivoCsvArrayLISTObjeto() {
         initComponents();
         personalizarVentana();
 
@@ -34,7 +35,7 @@ public class VentanaTableArchivoCsv extends javax.swing.JFrame {
         tblPromedio.getTableHeader().setBorder(new LineBorder(new Color(255, 162, 232)));
     }
     
-    public void llenarArchivoCsv(){
+    public void llenarListArchivoCsv(){
         //LECTURA DE UN ARCHIVO TEXTO
         File f;//CONVERTIR EL ARCHIVO FISICO
         FileReader fr;//ABRIR UNA CANALETA DE COMUNICACIÓN(ORIGEN-DESTINO)
@@ -50,20 +51,16 @@ public class VentanaTableArchivoCsv extends javax.swing.JFrame {
             while ((fila = br.readLine()) != null) {
                 if (i != 0) {
                     String[] p = fila.split(";");
-                    n1[row] = Integer.parseInt(p[0]);
-                    n2[row] = Integer.parseInt(p[1]);
-                    n3[row] = Integer.parseInt(p[2]);
-                    n4[row] = Integer.parseInt(p[3]);
-                    row++;
+                    Nota nota = new Nota(Integer.parseInt(p[0]),
+                                         Integer.parseInt(p[1]),
+                                         Integer.parseInt(p[2]),
+                                         Integer.parseInt(p[3]));
+                        notas_al.add(nota);
+                        System.out.println(nota);
                 }
                 i++;
             }
-            System.out.printf("%7s %2s %2s %2s %2s %2s","A1","A2","A3","A4","A5","A6");
-            System.out.println();
-            System.out.println("N1: " + Arrays.toString(n1));
-            System.out.println("N2: " + Arrays.toString(n2));
-            System.out.println("N3: " + Arrays.toString(n3));
-            System.out.println("N4: " + Arrays.toString(n4));
+          
         }catch (IOException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
@@ -71,31 +68,27 @@ public class VentanaTableArchivoCsv extends javax.swing.JFrame {
     }
 
     public void cargarDatosTable() {
-        llenarArchivoCsv();
+        
+        llenarListArchivoCsv();
+        
         double promedio = 0;
         double promedioClase = 0;
         String[] datosblanco = {"", "", "", "", ""};
         int i;
-        for (i = 0; i < n1.length; i++) {
+        for (i = 0; i < notas_al.size(); i++) {
+            Nota nota = notas_al.get(i);
             dtm.addRow(datosblanco);
-            dtm.setValueAt(n1[i], i, 0);//dato,fila,columna
-            dtm.setValueAt(n2[i], i, 1);
-            dtm.setValueAt(n3[i], i, 2);
-            dtm.setValueAt(n4[i], i, 3);
+            dtm.setValueAt(nota.getNota1(), i, 0);//dato,fila,columna
+            dtm.setValueAt(nota.getNota2(), i, 1);
+            dtm.setValueAt(nota.getNota3(), i, 2);
+            dtm.setValueAt(nota.getNota4(), i, 3);
 
-            int menornota = n1[i];
-            if (n2[i] < menornota) {
-                menornota = n2[i];
-            }
-            if (n3[i] < menornota) {
-                menornota = n3[i];
-            }
-            if (n4[i] < menornota) {
-                menornota = n4[i];
-            }
-            promedio = (n1[i] + n2[i] + n3[i] + n4[i] - menornota) / 3.0;
+            promedio = nota.promedio();
+            
             promedioClase = promedioClase + promedio;
+            
             String promedios = String.format("%5.2f", promedio);
+            
             dtm.setValueAt(promedios, i, 4);
         }
         promedioClase = promedioClase / dtm.getRowCount();
@@ -251,21 +244,27 @@ public class VentanaTableArchivoCsv extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaTableArchivoCsv.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaTableArchivoCsvArrayLISTObjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaTableArchivoCsv.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaTableArchivoCsvArrayLISTObjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaTableArchivoCsv.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaTableArchivoCsvArrayLISTObjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaTableArchivoCsv.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaTableArchivoCsvArrayLISTObjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaTableArchivoCsv().setVisible(true);
+                new VentanaTableArchivoCsvArrayLISTObjeto().setVisible(true);
             }
         });
     }

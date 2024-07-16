@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class Principal {
+public class Lectura {
 
     public static void main(String[] args) {
         //LECTURA DE UN ARCHIVO TEXTO
@@ -14,10 +14,11 @@ public class Principal {
         FileReader fr;//ABRIR UNA CANALETA DE COMUNICACIÓN(ORIGEN-DESTINO)
         BufferedReader br;//LEER 
         String fila = "";
-        int[] n1 = new int[6];
-        int[] n2 = new int[6];
-        int[] n3 = new int[6];
-        int[] n4 = new int[6];
+        double[] n1 = new double[6];
+        double[] n2 = new double[6];
+        double[] n3 = new double[6];
+        double[] n4 = new double[6];
+        double[] n5 = new double[6];
 
         try {
             f = new File("data/NOTAS.csv");
@@ -28,10 +29,11 @@ public class Principal {
             while ((fila = br.readLine()) != null) {
                 if (i != 0) {
                     String[] p = fila.split(";");
-                    n1[row] = Integer.parseInt(p[0]);
-                    n2[row] = Integer.parseInt(p[1]);
-                    n3[row] = Integer.parseInt(p[2]);
-                    n4[row] = Integer.parseInt(p[3]);
+                    n1[row] = Double.parseDouble(p[0]);
+                    n2[row] = Double.parseDouble(p[1]);
+                    n3[row] = Double.parseDouble(p[2]);
+                    n4[row] = Double.parseDouble(p[3]);
+                    n5[row] = Double.parseDouble(p[4]);
                     row++;
                 }
                 i++;
@@ -42,6 +44,7 @@ public class Principal {
             System.out.println("N2: " + Arrays.toString(n2));
             System.out.println("N3: " + Arrays.toString(n3));
             System.out.println("N4: " + Arrays.toString(n4));
+            System.out.println("N5: " + Arrays.toString(n5));
         }catch (IOException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
