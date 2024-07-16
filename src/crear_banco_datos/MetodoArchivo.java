@@ -6,10 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class MetodoArchivo {
 
@@ -100,4 +101,35 @@ public class MetodoArchivo {
         }
         return mujeres_al;
     }
+        public static String obtenerFechaNacimientoAleatorio(){
+            String fecha = "";
+            int yearAleatorio = (int)(Math.random()*21 + 1980);
+            int mesAleatorio = (int)(Math.random()*12 + 1);
+
+            LocalDate fechaAux = LocalDate.of(yearAleatorio, mesAleatorio, 1);
+            int diasAleatorio = (int)(Math.random()*fechaAux.lengthOfMonth()+1);
+            String da = String.format("%02d", diasAleatorio);
+            String ma = String.format("%02d", mesAleatorio);
+            
+       
+             /*
+            String da = "";
+            if (diasAleatorio < 10){
+                da = "0" + diasAleatorio;
+            }else {
+                da = "" + diasAleatorio;
+            }
+            String ma = "";
+            if (mesAleatorio < 10){
+                ma = "0" + mesAleatorio;
+            }else {
+                ma = "" + mesAleatorio;
+            }
+           */
+            fecha = yearAleatorio+"-"+ma+"-"+da;
+            
+            return fecha;
+         } 
+          
+        
 }
