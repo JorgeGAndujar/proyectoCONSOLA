@@ -1,10 +1,10 @@
 
-package hexágonoregular;
+package hexagonoregular;
 
 import circulo.Libreria;
 import java.util.Scanner;
 
-public class Hexágono {
+public class Hexagono {
 
 
     public static void main(String[] args) {

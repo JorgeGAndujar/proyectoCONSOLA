@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 
-public class CalendarioEligeMesAño {
+public class CalendarioEligeMesAno {
 
     public static void main(String[] args) {
      // Definir el año y el mes
