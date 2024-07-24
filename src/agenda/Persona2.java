@@ -6,7 +6,7 @@ public class Persona2 {
     private String dni;
     private String nombre;
     private String paterno;
-    private String dirección;
+    private String direccion;
     private String telefono;
     private String nacimiento;
     //CONSTRUCTORES
@@ -15,16 +15,16 @@ public class Persona2 {
         this.dni = "";
         this.nombre = "";
         this.paterno = "";
-        this.dirección = "";
+        this.direccion = "";
         this.telefono =  "";
         this.nacimiento = "";
     }
 
-    public Persona2(String dni, String nombre, String paterno, String dirección, String telefono, String nacimiento) {
+    public Persona2(String dni, String nombre, String paterno, String direccion, String telefono, String nacimiento) {
         this.dni = dni;
         this.nombre = nombre;
         this.paterno = paterno;
-        this.dirección = dirección;
+        this.direccion = direccion;
         this.telefono = telefono;
         this.nacimiento = nacimiento;
     }
@@ -54,12 +54,12 @@ public class Persona2 {
         this.paterno = paterno;
     }
 
-    public String getDirección() {
-        return dirección;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirección(String dirección) {
-        this.dirección = dirección;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getTelefono() {
@@ -81,7 +81,7 @@ public class Persona2 {
 
     @Override
     public String toString() {
-        return "Persona{" + "dni=" + dni + ", nombre=" + nombre + ", paterno=" + paterno + ", direcci\u00f3n=" + dirección + ", telefono=" + telefono + ", nacimiento=" + nacimiento + '}';
+        return "Persona{" + "dni=" + dni + ", nombre=" + nombre + ", paterno=" + paterno + ", direcci\u00f3n=" + direccion + ", telefono=" + telefono + ", nacimiento=" + nacimiento + '}';
     }
     
 }

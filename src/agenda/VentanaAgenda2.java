@@ -14,8 +14,8 @@ import java.sql.Connection;
 public class VentanaAgenda2 extends javax.swing.JFrame {
 
     //BASE DE DATOS
-    List<Persona> personas_al;
-    
+    List<Persona2> personas_al;
+
     ConexionMysql1 cm = new ConexionMysql1("PROYECTO25");
     Connection conexion = cm.getConexion();
 
@@ -27,8 +27,8 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
 
     }
 
-    public List<Persona> obtenerTodosLosRegistros() {
-        List<Persona> personas_al = new ArrayList<>();
+    public List<Persona2> obtenerTodosLosRegistros() {
+        List<Persona2> personas_al = new ArrayList<>();
         String sql = "SELECT * FROM Persona";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -40,7 +40,7 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
                 String direccion = rs.getString("direccion");
                 String telefono = rs.getString("telefono");
                 String nacimiento = rs.getString("nacimiento");
-                Persona persona = new Persona(dni, nombre, apellidos, direccion, telefono, nacimiento);
+                Persona2 persona = new Persona2(dni, nombre, apellidos, direccion, telefono, nacimiento);
                 personas_al.add(persona);
             }
         } catch (SQLException e) {
@@ -50,7 +50,7 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
     }
 
     public void cargarBaseDatos() {
-      personas_al = obtenerTodosLosRegistros();
+        personas_al = obtenerTodosLosRegistros();
     }
 
     public void personalizarVentana() {
@@ -64,11 +64,18 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
     }
 
     public void pintarCajitas(int indice) {
-        Persona persona = personas_al.get(indice);
+        // Verificar que el índice está dentro del rango permitido
+        if (indice >= 0 && indice < personas_al.size()) {
+            Persona2 persona = personas_al.get(indice);
+            // Realizar operaciones con el objeto persona
+        } else {
+            System.out.println("Índice fuera de los límites: " + indice);
+        }
+        Persona2 persona = personas_al.get(indice);
         txtDNI.setText(persona.getDni());
         txtNOMBRE.setText(persona.getNombre());
         txtPATERNO.setText(persona.getPaterno());
-        txtDIRECCION.setText(persona.getDirección());
+        txtDIRECCION.setText(persona.getDireccion());
         txtTELEFONO.setText(persona.getTelefono());
         txtNACIMIENTO.setText(persona.getNacimiento());
         ;
@@ -100,6 +107,7 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
         cmdINICIO = new javax.swing.JButton();
         cmdFIN = new javax.swing.JButton();
         txtINDICE1 = new javax.swing.JTextField();
+        cmdNuevo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(760, 390));
@@ -200,7 +208,7 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
                 cmdGUARDARActionPerformed(evt);
             }
         });
-        getContentPane().add(cmdGUARDAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 252, -1, -1));
+        getContentPane().add(cmdGUARDAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 270, -1, -1));
 
         cmdINICIO.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         cmdINICIO.setText("INICIO");
@@ -230,6 +238,14 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtINDICE1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, 90, -1));
+
+        cmdNuevo.setText("NUEVO");
+        cmdNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNuevoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmdNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -264,28 +280,49 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtINDICE1ActionPerformed
 
     private void cmdGUARDARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdGUARDARActionPerformed
-        String indices = txtINDICE1.getText();
-        int indicei = Integer.parseInt(indices);
+     // Recoger datos del formulario
+    String dni = txtDNI.getText();
+    String nombre = txtNOMBRE.getText();
+    String paterno = txtPATERNO.getText();
+    String direccion = txtDIRECCION.getText();
+    String telefono = txtTELEFONO.getText();
+    String nacimiento = txtNACIMIENTO.getText();
 
-        String dni = txtDNI.getText();
-        String nombre = txtNOMBRE.getText();
-        String paterno = txtPATERNO.getText();
-        String direccion = txtDIRECCION.getText();
-        String telefono = txtTELEFONO.getText();
-        String nacimiento = txtNACIMIENTO.getText();
+    // Crear un objeto Persona con los datos recogidos
+    Persona2 persona = new Persona2(dni, nombre, paterno, direccion, telefono, nacimiento);
 
-        //Persona persona = new Persona(dni,nombre,paterno,direccion,telefono,nacimiento);
-        //personas_al.add(indicei, persona);
-        //personas_al.remove(personas_al.size()-1);
-        Persona persona = personas_al.get(indicei);
-        persona.setDni(dni);
-        persona.setNombre(nombre);
-        persona.setPaterno(paterno);
-        persona.setDirección(direccion);
-        persona.setTelefono(telefono);
-        persona.setNacimiento(nacimiento);
+    // Crear una instancia de MetodoCrud
+    MetodoCrud mc = new MetodoCrud(conexion);
 
-        JOptionPane.showMessageDialog(null, "GRABACION CORRECTA", "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+    // Insertar la nueva persona en la base de datos
+    boolean insercionCorrecta = mc.insertarPersona(persona);
+
+    // Comprobar si la inserción fue correcta y mostrar un mensaje
+    if (insercionCorrecta) {
+        System.out.println("Alumno insertado correctamente.");
+        // Añadir la persona a la lista local si la inserción fue correcta
+        personas_al.add(persona);
+        // Vaciar las cajas de texto
+        txtDNI.setText("");
+        txtNOMBRE.setText("");
+        txtPATERNO.setText("");
+        txtDIRECCION.setText("");
+        txtTELEFONO.setText("");
+        txtNACIMIENTO.setText("");
+        
+        // Actualizar la vista con el nuevo índice
+        int nuevoIndice = personas_al.size() - 1; // Último índice de la lista
+        txtINDICE1.setText(String.valueOf(nuevoIndice + 1)); // Actualizar índice para mostrar al usuario
+        System.out.println(nuevoIndice);
+        // Verificar que el nuevo índice esté dentro del rango adecuado antes de llamar a pintarCajitas
+        if (nuevoIndice >= 0 && nuevoIndice < personas_al.size()) {
+            pintarCajitas(nuevoIndice);
+        } else {
+            System.out.println("Nuevo índice fuera de los límites: " + nuevoIndice);
+        }
+    } else {
+        System.out.println("Hubo un error al insertar el alumno.");
+    }
     }//GEN-LAST:event_cmdGUARDARActionPerformed
 
     private void cmdFINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdFINActionPerformed
@@ -298,6 +335,27 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
         pintarCajitas(0);
 
     }//GEN-LAST:event_cmdINICIOActionPerformed
+    
+    private void cmdNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNuevoActionPerformed
+        // Vaciar las cajas de texto
+        txtDNI.setText("");
+        txtNOMBRE.setText("");
+        txtPATERNO.setText("");
+        txtDIRECCION.setText("");
+        txtTELEFONO.setText("");
+        txtNACIMIENTO.setText("");
+        int nuevoIndice = personas_al.size(); // Use the current size directly
+        txtINDICE1.setText((nuevoIndice) + "");
+
+        // Verificar que el nuevo índice esté dentro del rango adecuado antes de llamar a pintarCajitas
+        if (nuevoIndice >= 0 && nuevoIndice < personas_al.size()) {
+            pintarCajitas(nuevoIndice);
+        } else {
+            System.out.println("Nuevo índice: " + nuevoIndice);
+        }
+
+
+    }//GEN-LAST:event_cmdNuevoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -341,6 +399,7 @@ public class VentanaAgenda2 extends javax.swing.JFrame {
     private javax.swing.JButton cmdFIN;
     private javax.swing.JButton cmdGUARDAR;
     private javax.swing.JButton cmdINICIO;
+    private javax.swing.JButton cmdNuevo;
     private javax.swing.JLabel lblDIRECCION;
     private javax.swing.JLabel lblDNI;
     private javax.swing.JLabel lblNACIMIENTO;
